@@ -27,8 +27,8 @@ export function LandingNav() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/90 dark:bg-[rgb(10,10,15)]/90 backdrop-blur-xl shadow-sm border-b border-[rgb(226,232,240)] dark:border-[rgb(30,41,59)]"
+        scrolled || mobileOpen
+          ? "bg-white/95 dark:bg-[rgb(10,10,15)]/95 backdrop-blur-xl shadow-sm border-b border-[rgb(226,232,240)] dark:border-[rgb(30,41,59)]"
           : "bg-transparent"
       }`}
     >
@@ -67,7 +67,8 @@ export function LandingNav() {
             <ThemeToggle />
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2 rounded-lg hover:bg-[rgb(241,245,249)] dark:hover:bg-[rgb(30,41,59)] transition-colors"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              className="p-2 rounded-lg text-[rgb(15,23,42)] dark:text-white hover:bg-[rgb(241,245,249)] dark:hover:bg-[rgb(30,41,59)] transition-colors"
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -75,18 +76,18 @@ export function LandingNav() {
         </div>
 
         {mobileOpen && (
-          <div className="md:hidden py-4 border-t border-[rgb(226,232,240)] dark:border-[rgb(30,41,59)] space-y-2">
+          <div className="md:hidden py-4 border-t border-[rgb(226,232,240)] dark:border-[rgb(30,41,59)] space-y-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block px-3 py-2 rounded-lg text-sm text-[rgb(100,116,139)] hover:bg-[rgb(241,245,249)] dark:hover:bg-[rgb(30,41,59)] hover:text-[rgb(37,99,235)] transition-colors"
+                className="block px-3 py-2.5 rounded-lg text-base font-medium text-[rgb(51,65,85)] dark:text-[rgb(203,213,225)] hover:bg-[rgb(241,245,249)] dark:hover:bg-[rgb(30,41,59)] hover:text-[rgb(37,99,235)] transition-colors"
               >
                 {link.label}
               </a>
             ))}
-            <div className="pt-2 space-y-2">
+            <div className="pt-3 px-3 space-y-2">
               <Button asChild variant="outline" className="w-full">
                 <Link href="/login">Sign in</Link>
               </Button>

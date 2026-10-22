@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @source "../";
 
+/* dark: utilities follow the theme toggle (.dark on <html>), not the OS setting */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --background: 248 250 252;
