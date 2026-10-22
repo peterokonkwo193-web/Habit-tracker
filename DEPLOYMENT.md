@@ -84,9 +84,15 @@ In your Vercel dashboard → Project → Settings → Environment Variables, add
 | `CRON_SECRET` | Random string |
 
 ### 4. Cron Jobs
-The `vercel.json` configures one cron job, `/api/cron/reminders`, which runs every minute.
-It sends each user up to three Telegram reminders a day (morning, midday, evening), at the
-times they set in Settings and in their own profile timezone.
+`/api/cron/reminders` must be called every minute. It sends each user up to three Telegram
+reminders a day (morning, midday, evening), at the times they set in Settings and in their
+own profile timezone.
+
+Vercel Hobby only allows daily crons, so use a free external scheduler such as
+https://cron-job.org:
+- URL: `https://your-domain.com/api/cron/reminders`
+- Schedule: every minute
+- Request header: `Authorization: Bearer <CRON_SECRET>`
 
 Run `supabase/migrations/002_daily_reminders.sql` in the SQL Editor to add the midday and evening columns.
 
