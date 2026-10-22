@@ -33,7 +33,7 @@ export async function handleTelegramUpdate(body: object) {
     return ctx.reply(
       `👋 Welcome to StreakFlow Bot!\n\n` +
       `To connect your account:\n` +
-      `1. Go to streakflow.app/profile\n` +
+      `1. Go to ${process.env.NEXT_PUBLIC_SITE_URL ?? "the app"}/profile\n` +
       `2. Click "Connect Telegram"\n` +
       `3. Send your verification code here\n\n` +
       `Already have a code? Send it now!`

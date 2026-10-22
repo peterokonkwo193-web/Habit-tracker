@@ -11,7 +11,7 @@ const FAQS = [
   },
   {
     q: "How does the Telegram integration work?",
-    a: "Go to your Profile page and click 'Connect Telegram'. You'll get a unique verification code. Open the @StreakFlowBot on Telegram, send /start and then your code. That's it — your account is linked and you'll start receiving reminders.",
+    a: "Go to your Profile page and click 'Connect Telegram'. You'll get a unique verification code. Open @HabitFlowApp_bot on Telegram, send /start and then your code. That's it — your account is linked and you'll start receiving reminders.",
   },
   {
     q: "Can I track habits on custom days?",

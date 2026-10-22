@@ -124,15 +124,26 @@ export function TelegramConnect({ telegram }: TelegramConnectProps) {
                   <ol className="space-y-2 text-sm text-[rgb(100,116,139)]">
                     <li className="flex items-start gap-2">
                       <span className="w-5 h-5 rounded-full bg-[rgb(37,99,235)] text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
-                      Open Telegram and search for <strong className="text-[rgb(15,23,42)] dark:text-white">@StreakFlowBot</strong>
+                      <span>
+                        Open{" "}
+                        <a
+                          href="https://t.me/HabitFlowApp_bot"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold text-[rgb(37,99,235)] underline underline-offset-2"
+                        >
+                          @HabitFlowApp_bot
+                        </a>{" "}
+                        on Telegram
+                      </span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-5 h-5 rounded-full bg-[rgb(37,99,235)] text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
-                      Send <strong className="text-[rgb(15,23,42)] dark:text-white">/start</strong> to the bot
+                      <span>Send <strong className="text-[rgb(15,23,42)] dark:text-white">/start</strong> to the bot</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-5 h-5 rounded-full bg-[rgb(37,99,235)] text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
-                      Send your code: <strong className="text-[rgb(37,99,235)] font-mono">{code}</strong>
+                      <span>Send your code: <strong className="text-[rgb(37,99,235)] font-mono">{code}</strong></span>
                     </li>
                   </ol>
                 </motion.div>
