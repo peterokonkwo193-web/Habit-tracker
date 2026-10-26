@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { habitSchema } from "@/lib/validations/habit";
-import { getTodayString } from "@/lib/utils";
+import { getTodayString, getDayOfWeek } from "@/lib/utils";
+import { getDeviceTimezone } from "@/lib/timezone";
 import type { HabitInput } from "@/lib/validations/habit";
 
 export async function createHabit(data: HabitInput) {
@@ -112,7 +113,7 @@ export async function toggleHabitCompletion(habitId: string, date?: string) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
-  const targetDate = date ?? getTodayString();
+  const targetDate = date ?? getTodayString(await getDeviceTimezone());
 
   const { data: existing } = await supabase
     .from("habit_logs")
@@ -174,8 +175,9 @@ export async function getHabitsForToday() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { habits: [], error: null };
 
-  const today = getTodayString();
-  const dayOfWeek = new Date().getDay();
+  const timezone = await getDeviceTimezone();
+  const today = getTodayString(timezone);
+  const dayOfWeek = getDayOfWeek(timezone);
 
   const { data: habits, error } = await supabase
     .from("habits")

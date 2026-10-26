@@ -20,8 +20,31 @@ export function formatDateShort(date: string | Date): string {
   }).format(new Date(date));
 }
 
-export function getTodayString(): string {
-  return new Date().toISOString().split("T")[0];
+// Calendar date and weekday in an IANA timezone (UTC when missing or invalid)
+function zonedParts(timezone?: string | null) {
+  const format = (timeZone: string) =>
+    Object.fromEntries(
+      new Intl.DateTimeFormat("en-US", {
+        timeZone, year: "numeric", month: "2-digit", day: "2-digit", weekday: "short",
+      }).formatToParts(new Date()).map((p) => [p.type, p.value])
+    );
+  try {
+    return format(timezone || "UTC");
+  } catch {
+    return format("UTC");
+  }
+}
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+export function getTodayString(timezone?: string | null): string {
+  const p = zonedParts(timezone);
+  return `${p.year}-${p.month}-${p.day}`;
+}
+
+// 0 = Sunday, matching Date.getDay()
+export function getDayOfWeek(timezone?: string | null): number {
+  return WEEKDAYS.indexOf(zonedParts(timezone).weekday);
 }
 
 export function getDateString(date: Date): string {

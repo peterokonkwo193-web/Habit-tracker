@@ -24,12 +24,10 @@ export function NotificationsCard({
   reminderTime,
   middayReminderTime,
   eveningReminderTime,
-  timezone,
 }: {
   reminderTime?: string | null;
   middayReminderTime?: string | null;
   eveningReminderTime?: string | null;
-  timezone?: string | null;
 }) {
   const [isPending, startTransition] = useTransition();
   // null during the server render, which doesn't know the device's timezone
@@ -90,13 +88,8 @@ export function NotificationsCard({
             label="🌙 Evening summary (how your day went)"
             type="time"
           />
-          {deviceTimezone && timezone !== deviceTimezone && (
-            <p className="text-xs rounded-lg px-3 py-2 bg-[rgb(254,243,199)] text-[rgb(146,64,14)] dark:bg-[rgb(69,26,3)] dark:text-[rgb(253,230,138)]">
-              Your reminders are set to {timezone || "UTC"}, but this device is on {deviceTimezone}. Press Save to switch to {deviceTimezone}.
-            </p>
-          )}
           <p className="text-xs text-[rgb(148,163,184)]">
-            Times are in your local time ({deviceTimezone ?? timezone ?? "UTC"}). Requires Telegram to be connected. Set up Telegram on your Profile page.
+            Reminders follow your phone&apos;s clock and timezone automatically. Requires Telegram to be connected. Set up Telegram on your Profile page.
           </p>
           <Button type="submit" loading={isPending}>
             <Save className="h-4 w-4" />

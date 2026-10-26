@@ -1,6 +1,7 @@
 import { Telegraf, Context } from "telegraf";
 import { message } from "telegraf/filters";
 import { createClient } from "@supabase/supabase-js";
+import { getTodayString, getDayOfWeek } from "@/lib/utils";
 
 function getSupabase() {
   return createClient(
@@ -166,9 +167,18 @@ async function getUserByChatId(chatId: string) {
   return data;
 }
 
+// "Today" for the user's own device timezone (synced from the web app)
+async function getUserToday(userId: string) {
+  const { data } = await getSupabase()
+    .from("profiles")
+    .select("timezone")
+    .eq("user_id", userId)
+    .single();
+  return { today: getTodayString(data?.timezone), dayOfWeek: getDayOfWeek(data?.timezone) };
+}
+
 async function getTodayHabitsForUser(userId: string) {
-  const today = new Date().toISOString().split("T")[0];
-  const dayOfWeek = new Date().getDay();
+  const { today, dayOfWeek } = await getUserToday(userId);
 
   const { data: habits } = await getSupabase()
     .from("habits")
@@ -235,7 +245,7 @@ async function handleHabitCompletion(ctx: Context, chatId: string, num: number) 
     return ctx.reply(`✅ "${habit.name}" is already marked complete today!`);
   }
 
-  const today = new Date().toISOString().split("T")[0];
+  const { today } = await getUserToday(user.user_id);
   const { error } = await getSupabase()
     .from("habit_logs")
     .insert({ habit_id: habit.id, user_id: user.user_id, completed_date: today });

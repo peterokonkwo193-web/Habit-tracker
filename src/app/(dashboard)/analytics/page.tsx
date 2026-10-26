@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { AnalyticsDashboard } from "@/components/analytics/analytics-dashboard";
 import { getTodayString, getDateString } from "@/lib/utils";
+import { getDeviceTimezone } from "@/lib/timezone";
 
 export const metadata = { title: "Analytics" };
 
@@ -36,7 +37,7 @@ export default async function AnalyticsPage() {
       habits={habits ?? []}
       logs={logs ?? []}
       streaks={streaks ?? []}
-      today={getTodayString()}
+      today={getTodayString(await getDeviceTimezone())}
     />
   );
 }

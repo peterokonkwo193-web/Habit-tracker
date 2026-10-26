@@ -15,8 +15,6 @@ export type HabitInput = z.infer<typeof habitSchema>;
 
 export const profileSchema = z.object({
   full_name: z.string().min(2, "Name too short").max(50, "Name too long"),
-  timezone: z.string().min(1, "Timezone required"),
-  reminder_time: z.string().optional().nullable(),
 });
 
 export type ProfileInput = z.infer<typeof profileSchema>;

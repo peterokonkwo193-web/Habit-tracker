@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -8,13 +8,9 @@ import { Save, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { profileSchema, type ProfileInput } from "@/lib/validations/habit";
 import { updateProfile } from "@/lib/actions/profile";
 import type { Profile } from "@/types";
-
-// Every IANA timezone the runtime knows (includes Africa/*, which the old short list lacked)
-const TIMEZONES = ["UTC", ...Intl.supportedValuesOf("timeZone").filter((tz) => tz !== "UTC")];
 
 interface ProfileFormProps {
   profile: Profile | null;
@@ -24,12 +20,10 @@ interface ProfileFormProps {
 export function ProfileForm({ profile, email }: ProfileFormProps) {
   const [isPending, startTransition] = useTransition();
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<ProfileInput>({
+  const { register, handleSubmit, formState: { errors } } = useForm<ProfileInput>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       full_name: profile?.full_name ?? "",
-      timezone: profile?.timezone ?? "UTC",
-      reminder_time: profile?.reminder_time ?? "",
     },
   });
 
@@ -74,31 +68,6 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
             label="Full name"
             placeholder="Your name"
             error={errors.full_name?.message}
-          />
-
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-[rgb(15,23,42)] dark:text-[rgb(241,245,249)]">
-              Timezone
-            </label>
-            <Select
-              defaultValue={profile?.timezone ?? "UTC"}
-              onValueChange={(v) => setValue("timezone", v)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {TIMEZONES.map((tz) => (
-                  <SelectItem key={tz} value={tz}>{tz}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <Input
-            {...register("reminder_time")}
-            label="Default reminder time"
-            type="time"
           />
 
           <Button type="submit" loading={isPending}>

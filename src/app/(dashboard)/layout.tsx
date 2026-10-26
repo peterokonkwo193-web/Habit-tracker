@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
+import { TimezoneSync } from "@/components/layout/timezone-sync";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -13,12 +14,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, is_admin")
+    .select("full_name, is_admin, timezone")
     .eq("user_id", user.id)
     .single();
 
   return (
     <div className="flex min-h-screen bg-[rgb(248,250,252)] dark:bg-[rgb(10,10,15)]">
+      <TimezoneSync savedTimezone={profile?.timezone ?? null} />
       <Sidebar
         profile={{
           full_name: profile?.full_name ?? null,

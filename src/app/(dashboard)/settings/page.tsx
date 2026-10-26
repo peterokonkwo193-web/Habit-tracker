@@ -12,7 +12,7 @@ export default async function SettingsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("reminder_time, midday_reminder_time, evening_reminder_time, timezone")
+    .select("reminder_time, midday_reminder_time, evening_reminder_time")
     .eq("user_id", user.id)
     .single();
 
@@ -27,7 +27,6 @@ export default async function SettingsPage() {
         reminderTime={profile?.reminder_time}
         middayReminderTime={profile?.midday_reminder_time}
         eveningReminderTime={profile?.evening_reminder_time}
-        timezone={profile?.timezone}
       />
     </div>
   );

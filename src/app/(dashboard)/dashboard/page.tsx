@@ -7,7 +7,8 @@ import { QuoteCard } from "@/components/dashboard/quote-card";
 import { WeeklyProgress } from "@/components/dashboard/weekly-progress";
 import { QuickAddHabit } from "@/components/habits/quick-add";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getTodayString, getDailyQuote } from "@/lib/utils";
+import { getTodayString, getDayOfWeek, getDailyQuote } from "@/lib/utils";
+import { getDeviceTimezone } from "@/lib/timezone";
 import { formatDate } from "@/lib/utils";
 
 export const metadata = { title: "Dashboard" };
@@ -17,8 +18,9 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const today = getTodayString();
-  const dayOfWeek = new Date().getDay();
+  const timezone = await getDeviceTimezone();
+  const today = getTodayString(timezone);
+  const dayOfWeek = getDayOfWeek(timezone);
 
   const [{ data: habits }, { data: allLogs }] = await Promise.all([
     supabase
