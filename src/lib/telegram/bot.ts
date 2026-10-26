@@ -323,12 +323,19 @@ async function sendStreaks(ctx: Context, chatId: string) {
   );
 }
 
+const NO_HABITS_MESSAGE =
+  `⏰ Reminder!\n\nYou have no habits scheduled for today yet.\n\n` +
+  `Add your daily activities on the Habits page: ${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/habits`;
+
 export async function sendMorningReminder(chatId: string, userId: string) {
   if (!process.env.TELEGRAM_BOT_TOKEN) return;
   const bot = createBot();
 
   const habits = await getTodayHabitsForUser(userId);
-  if (!habits.length) return;
+  if (!habits.length) {
+    await bot.telegram.sendMessage(chatId, NO_HABITS_MESSAGE);
+    return;
+  }
 
   const list = habits.map((h) => `${h.index}. ${h.emoji} ${h.name}`).join("\n");
 
@@ -343,7 +350,10 @@ export async function sendMiddayReminder(chatId: string, userId: string) {
   const bot = createBot();
 
   const habits = await getTodayHabitsForUser(userId);
-  if (!habits.length) return;
+  if (!habits.length) {
+    await bot.telegram.sendMessage(chatId, NO_HABITS_MESSAGE);
+    return;
+  }
 
   const completed = habits.filter((h) => h.done).length;
   const list = habits.map((h) => `${h.done ? "✅" : `${h.index}.`} ${h.emoji} ${h.name}`).join("\n");

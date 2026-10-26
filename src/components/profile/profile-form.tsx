@@ -13,12 +13,8 @@ import { profileSchema, type ProfileInput } from "@/lib/validations/habit";
 import { updateProfile } from "@/lib/actions/profile";
 import type { Profile } from "@/types";
 
-const TIMEZONES = [
-  "UTC", "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
-  "America/Toronto", "Europe/London", "Europe/Paris", "Europe/Berlin", "Europe/Moscow",
-  "Asia/Dubai", "Asia/Kolkata", "Asia/Singapore", "Asia/Tokyo", "Asia/Shanghai",
-  "Australia/Sydney", "Pacific/Auckland",
-];
+// Every IANA timezone the runtime knows (includes Africa/*, which the old short list lacked)
+const TIMEZONES = ["UTC", ...Intl.supportedValuesOf("timeZone").filter((tz) => tz !== "UTC")];
 
 interface ProfileFormProps {
   profile: Profile | null;

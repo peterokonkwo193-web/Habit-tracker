@@ -63,14 +63,27 @@ export async function updateReminderTime(formData: FormData) {
   const midday_reminder_time = (formData.get("midday_reminder_time") as string) || null;
   const evening_reminder_time = (formData.get("evening_reminder_time") as string) || null;
 
+  // Reminder times are entered in the device's local time, so store its timezone with them
+  const update: Record<string, string | null> = { reminder_time, midday_reminder_time, evening_reminder_time };
+  const timezone = formData.get("timezone") as string | null;
+  if (timezone) {
+    try {
+      new Intl.DateTimeFormat("en", { timeZone: timezone });
+      update.timezone = timezone;
+    } catch {
+      return { error: "Invalid timezone" };
+    }
+  }
+
   const { error } = await supabase
     .from("profiles")
-    .update({ reminder_time, midday_reminder_time, evening_reminder_time })
+    .update(update)
     .eq("user_id", user.id);
 
   if (error) return { error: error.message };
 
   revalidatePath("/settings");
+  revalidatePath("/profile");
   return { success: true };
 }
 
